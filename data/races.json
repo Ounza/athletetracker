@@ -1,0 +1,50 @@
+[
+  {
+    "competition": "Berlin Championships",
+    "meters": "100",
+    "time": "9.88",
+    "id": 1
+  },
+  {
+    "competition": "Berlin Championships",
+    "meters": "200",
+    "time": "19.65",
+    "id": 2
+  },
+  {
+    "competition": "Venice Championship",
+    "meters": "100",
+    "time": "10.22",
+    "id": 3
+  },
+  {
+    "competition": "Venice Championship",
+    "meters": "200",
+    "time": "19.98",
+    "id": 4
+  },
+  {
+    "competition": "London Championships",
+    "meters": "100",
+    "time": "10.58",
+    "id": 5
+  },
+  {
+    "competition": "London Championships",
+    "meters": "200",
+    "time": "19.66",
+    "id": 6
+  },
+  {
+    "competition": "Toronto Olympics",
+    "meters": "100",
+    "time": "9.0",
+    "id": 7
+  },
+  {
+    "competition": "Toronto Olympics",
+    "meters": "200",
+    "time": "20.99",
+    "id": 8
+  }
+]

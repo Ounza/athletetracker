@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Bootstrap 5.0 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"
+            defer
+        ></script>
+        <!-- Bootstrap icons -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+        />
+        <!-- Google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Custom style & script -->
+        <link rel="stylesheet" href="./styles/style.css" />
+        
+        <script src="./scripts/chart.min.js"></script>
+        <!-- Title & favicon -->
+        <title>Athlete Races - Track your progress</title>
+    </head>
+    <body>
+        <!-- Header section -->
+        <header
+            class="header d-flex justify-content-center align-items-center bg-dark"
+        >
+            <h1 class="h4 text-white ms-3 mb-0">
+                <i class="bi bi-stopwatch-fill"></i>  Race History
+            </h1>
+        </header>
+        <!-- Main section -->
+        <main class="main">
+            <div class="container py-3">
+                <div id="alert-wrapper"></div>
+                <button
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#add-race-modal"
+                >
+                    <i class="bi bi-activity"></i>
+                    <span class=" d-md-inline">Add a Race</span>
+                </button>
+                <div class="table-responsive pt-2">
+                    <table class="table table-striped table-borderless">
+                        <thead class="bg-dark text-white">
+                            <th>Id</th>
+                            <th>Competition Event Name</th>
+                            <th>Meters (200/100)</th>
+                            <th>Time in Seconds</th>
+                            <th>Actions</th>
+                        </thead>
+                        <tbody id="races-container">
+                            <!--Table for the display of the various races-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="instruction">
+                    <h5>Filter the Races By either choosing All Races /100 m / 200 m below.</h5>
+                    <h5> Click on the 100m /200m buttons to see the median race time in each category.</h5>
+                </div>
+                <div class="selection">
+                    <button type="button" class="btn btn-success" id="all">All Races</button> 
+                    <button type="button" class="btn btn-primary" id="100">100 Meters</button> 
+                    <button type="button" class="btn btn-danger" id="200">200 Meters</button> 
+                </div>
+    
+                <div id="canvas-container">
+                    <canvas id="myChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Add Race modal -->
+            <div class="modal fade" id="add-race-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="add-race-form">
+                            <div class="modal-header bg-dark text-light">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-activity"></i>Add New
+                                    Race
+                                </h5>
+                                <button
+                                    type="button"
+                                    class="btn-close bg-light"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label for="new-competition" class="form-label">Event Name:</label>
+                                    <input
+                                        type="text"
+                                        id="new-competition"
+                                        class="form-control"
+                                        placeholder="Enter name of the championship event"
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter a championship event name between 5 and 15 characters.
+                                    </div>
+                                </div>
+                                <div class="has-validation my-2">
+                                    <label for="new-meters" class="form-label"
+                                        >Select Meters:</label
+                                    >
+                                    <select id="new-meters" class="form-control form-select" required>
+                                        <option value="" selected>Choose Meters</option>
+                                        <option value="100">100 Meters</option>
+                                        <option value="200">200 Meters</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select between 100 or 200 meters.
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="new-time" class="form-label"
+                                        >Time:</label
+                                    >
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        id="new-time"
+                                        class="form-control"
+                                        placeholder="Enter your race time in seconds"
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter valid race time in seconds with at least one decimal place.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <input
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    value="Save Race"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /Add a Race modal -->
+
+            <!-- Edit Race modal -->
+            <div class="modal fade" id="edit-race-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="edit-race-form">
+                            <div class="modal-header bg-dark text-light">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-pencil-square me-2"></i>
+                                    Edit Race
+                                </h5>
+                                <button
+                                    type="button"
+                                    class="btn-close bg-light"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label for="edit-competition" class="form-label"
+                                        >Event Name:</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="edit-competition"
+                                        class="form-control"
+                                        placeholder="Enter name of the championship event"
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter a championship event name between 5 and 15 characters.
+                                    </div>
+                                </div>
+                                <div class="my-2">
+                                    <label for="edit-meters" class="form-label"
+                                        >Meters:</label
+                                    >
+                                    <select id="edit-meters" class="form-control form-select" required>
+                                        <option value="" selected>Choose Meters</option>
+                                        <option value="100">100 Meters</option>
+                                        <option value="200">200 Meters</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please enter either
+                                        <span class="fw-bold">200 / 100</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="edit-time" class="form-label"
+                                        >Time:</label
+                                    >
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        id="edit-time"
+                                        class="form-control"
+                                        placeholder="Enter your race time in seconds"
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter a valid race time in seconds with at least one decimal place.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <input
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    value="Save Race"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /Edit race modal -->
+
+           
+        </main>
+        <!-- Footer section -->
+        <footer class="footer d-flex justify-content-center align-items-center bg-dark">
+            <p class="lead mb-0 text-white">
+                All Right Reserved 2021 IST 4035 Group 5
+            </p>
+        </footer>
+
+        <script src="./scripts/main.js" defer></script>
+    </body>
+</html>
